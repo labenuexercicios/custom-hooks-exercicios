@@ -1,40 +1,31 @@
-import { useState, useEffect } from "react";
-import { BASE_URL } from "../constants/constants";
-import axios from "axios";
-import {Title,PostContainer } from './style'
-import { Card } from '../components/Card/Card'
+import React from 'react';
+import { Title, PostContainer } from './style';
+import { Card } from '../components/Card/Card';
+import useRequestData from '../hooks/useRequestData';
 
+const StarShipsListPage = () => {
 
-const  StarShipsListPage = () => {
-  const [starShipsList, setStarShipsList] = useState([]);
-
-
-  useEffect(() => {
-    axios
-      .get(`${BASE_URL}/starships`)
-      .then((response) => {
-        setStarShipsList(response.data.results);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },[]);
+  const [starShipsList, isLoading, isError] = useRequestData("/starships");
 
   return (
     <div>
       <Title>Título das Naves</Title>
       <PostContainer>
-
-      {starShipsList.map((starShip) => {
-        return(
-          <Card 
-          key={starShip.name} 
-          title={starShip.name}
-          text={starShip.manufacturer} 
-          backgroudColor={'gray'}
-          textColor={'#ffffff'}
-          />)
-      })}
+        {isError ? (
+          <p>Erro no carregamento</p>
+        ) : isLoading ? (
+          <p>Carregando...</p>
+        ) : (
+          starShipsList.map((starShip) => (
+            <Card 
+              key={starShip.name} 
+              title={starShip.name}
+              text={starShip.manufacturer} 
+              backgroundColor={'gray'}
+              textColor={'black'}
+            />
+          ))
+        )}
       </PostContainer>
     </div>
   );
