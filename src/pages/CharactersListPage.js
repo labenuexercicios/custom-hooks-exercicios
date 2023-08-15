@@ -3,22 +3,11 @@ import { BASE_URL } from "../constants/constants";
 import axios from "axios";
 import {Title,NameContainer } from './style'
 import { Card } from '../components/Card/Card'
+import useRequestData from "../hooks/useRequestData.js";
 
 
 const CharactersListPage = () => {
-  const [caractersList, setCaractersList] = useState([]);
- 
-
-  useEffect(() => {
-    axios
-      .get(`${BASE_URL}/people`)
-      .then((response) => {
-        setCaractersList(response.data.results);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  const caractersList = useRequestData('people')
 
   return (
     <div>
